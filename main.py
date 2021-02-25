@@ -1,7 +1,10 @@
+import os
 import argparse
 from importlib import import_module
 
 from loader import Data, count_nodes, gen_embedding, load_embedding
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-d', '--dataset', default='sample', help='dataset name')
