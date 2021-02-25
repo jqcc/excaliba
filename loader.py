@@ -69,12 +69,14 @@ class Data:
 
 def count_nodes(*datas):
     """计算节点数"""
-    node2id = []
+    node2id = set()
     for data in datas:
         for inp, tar in zip(data.inputs, data.targets):
             for n in inp:
                 if n not in node2id:
-                    node2id.append(n)
+                    node2id.add(n)
+            if tar not in node2id:
+                node2id.add(tar)
 
     return max(node2id)+1
 
