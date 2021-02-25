@@ -4,6 +4,7 @@ from importlib import import_module
 
 from loader import Data, count_nodes, gen_embedding, load_embedding
 
+# 屏蔽tf中的通知信息
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 parser = argparse.ArgumentParser()

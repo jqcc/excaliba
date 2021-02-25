@@ -6,7 +6,13 @@
 ```python
 import os
 os.environ["CUDA_VISIBLE_DEVICES"]="-1"
-import tensorflow as tf
+```
+
+在`main.py`中使用下面一条环境变量屏蔽了tf中的通知信息，如需打印，将其设置为`0`或注释掉即可。
+另外，将其设置为`2`表示`屏蔽通知信息和警告信息`，将其设置为`3`表示`屏蔽通知信息、警告信息和报错信息`。
+```python
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 ```
 
 ## 依赖
