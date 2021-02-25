@@ -85,7 +85,7 @@ class NeuralNetWork(metaclass=ABCMeta):
                     loss_.append(loss)
 
                     iteration += 1
-                    if iteration % 5 == 0:
+                    if iteration % 100 == 0:
                         print("Epoch: {}/{}".format(e+1, self.epoch),
                               "Iteration: {:d}".format(iteration),
                               "Train loss: {:6f}".format(np.mean(loss_)))
