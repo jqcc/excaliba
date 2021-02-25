@@ -83,11 +83,12 @@ class NeuralNetWork(metaclass=ABCMeta):
                     self.get_feed_dict(self.train_data.get_slice(i), 0.5)
                     _, loss, _ = sess.run(fetches, feed_dict=self.feed)
                     loss_.append(loss)
-                loss = np.mean(loss_)
-                if iteration % 5 == 0:
-                    print("Epoch: {}/{}".format(e, self.epoch),
-                          "Iteration: {:d}".format(iteration),
-                          "Train loss: {:6f}".format(loss))
+
+                    iteration += 1
+                    if iteration % 5 == 0:
+                        print("Epoch: {}/{}".format(e+1, self.epoch),
+                              "Iteration: {:d}".format(iteration),
+                              "Train loss: {:6f}".format(np.mean(loss_)))
 
                 self.save_model(sess)
                 self.test()
