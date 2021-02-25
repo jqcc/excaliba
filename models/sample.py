@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from Base.NN import NeuralNetWork
+from base.NN import NeuralNetWork
 
 
 class Model(NeuralNetWork):
