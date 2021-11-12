@@ -25,7 +25,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 ### 数据集
 
-数据集统一存放在`datas`目录下，以数据集名称命名目录。
+数据集统一存放在`datas`目录下，以数据集名称命名目录，如`/datas/sample/train_.txt`。
 
 数据集分: 训练集`(train_.txt)`, 测试集`(test_.txt)`。
 
@@ -40,22 +40,17 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 训练时使用`-d dataset`指定要加载的数据集，模型会依据数据名称自动到`datas`目录下加载对应数据
 
-## 输入说明
+## 使用说明
 
+### 训练模型
+将数据集放在`datas`目录下之后，启动模型训练，根据需要设定超参数
+```bash
+$ python main.py -m model_name -d dataset
+$ python main.py -m sample -d sample -e 10
+```
 
-## 输入示例
-{
-    
-}
-
-## 输出说明
-
-
-## 输出示例
-{
-    
-}
-
-
-
-
+### 测试模型
+将测试集放在`datas`目录下之后，启动模型测试
+```bash
+$ python main.py -m model_name -d dataset -t
+```
