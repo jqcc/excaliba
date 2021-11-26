@@ -7,7 +7,7 @@ import os
 
 class NeuralNetWork(metaclass=ABCMeta):
     def __init__(self, train_data, test_data, embedding, n_nodes, model_name, data_name,
-                 epoch=30, batch_size=100, embedding_size=100, lr=0.001, lr_dc=0.5, lr_dc_step=3):
+                 epoch=30, batch_size=100, embedding_size=100, lr=0.001, lr_dc=0.5, lr_dc_step=10):
         self.train_data = train_data
         self.test_data = test_data
         self.embedding = embedding
@@ -17,7 +17,7 @@ class NeuralNetWork(metaclass=ABCMeta):
         self.embedding_size = embedding_size
         self.learning_rate = lr
         self.learning_rate_decay = lr_dc
-        self.decay_steps = lr_dc_step * len(train_data.inputs) / batch_size
+        self.decay_steps = lr_dc_step
         self.global_step = tf.Variable(0, trainable=False, name="global_step")
         self.model_name = model_name
         self.data_name = data_name
@@ -32,8 +32,11 @@ class NeuralNetWork(metaclass=ABCMeta):
 
         self.inputs_ = tf.placeholder(tf.int32, [None, None], name='inputs')
         self.labels_ = tf.placeholder(tf.int32, [None], name='labels')
+        # session数据的掩码
         self.mask = tf.placeholder(tf.float32, [None, None], name='mask')
+        # 每条session的实际长度
         self.seq_len = tf.placeholder(tf.int32, [None], name='lens')
+        # dropout
         self.keep_prob_ = tf.placeholder(tf.float32, name='keep')
         self.feed = None
         self.is_train = True
@@ -140,3 +143,9 @@ class NeuralNetWork(metaclass=ABCMeta):
         if not os.path.exists(self.embed_save_path):
             os.makedirs(self.embed_save_path)
         np.save(self.embed_save_file, embeddings)
+        
+    def restore_session(self):
+        saver = tf.train.Saver()
+        sess = tf.Session()
+        saver.restore(sess, tf.train.latest_checkpoint(self.model_save_path))
+        return sess

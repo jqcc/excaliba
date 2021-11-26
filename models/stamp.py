@@ -1,3 +1,4 @@
+import numpy as np
 import tensorflow as tf
 
 from base.NN import NeuralNetWork
@@ -5,7 +6,7 @@ from base.NN import NeuralNetWork
 
 class Model(NeuralNetWork):
     def __init__(self, train_data, test_data, embedding, n_nodes, model_name, data_name,
-                 epoch=30, batch_size=100, embedding_size=100, lr=0.001, lr_dc=0.5, lr_dc_step=3):
+                 epoch=30, batch_size=100, embedding_size=100, lr=0.001, lr_dc=0.5, lr_dc_step=10):
         super().__init__(train_data, test_data, embedding, n_nodes, model_name, data_name,
                          epoch, batch_size, embedding_size, lr, lr_dc, lr_dc_step)
 
@@ -68,3 +69,23 @@ class Model(NeuralNetWork):
             self.last_click: last
         }
 
+    def restore_mode(self):
+        saver = tf.train.Saver()
+        sess = tf.Session()
+        saver.restore(sess, tf.train.latest_checkpoint(self.model_save_path))
+        return sess
+
+    def predict(self, sess, seq):
+        """给定序列推荐结果"""
+
+        fetchs = self.logits
+
+        feed = {
+            self.inputs_: seq,
+            self.mask: [[1] * len(seq)],
+            self.seq_len: [len(seq)],
+            self.keep_prob_: 1.0,
+            self.last_click: seq[-1]
+        }
+        scores = sess.run(fetchs, feed_dict=feed)
+        return np.argmax(scores)+1

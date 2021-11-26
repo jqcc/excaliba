@@ -14,7 +14,7 @@ parser.add_argument('-e', '--epoch', type=int, default=5, help='number of epochs
 parser.add_argument('-b', '--batchSize', type=int, default=100, help='input batch size')
 parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
 parser.add_argument('--lr_dc', type=float, default=0.5, help='learning rate decay rate')
-parser.add_argument('--lr_dc_step', type=int, default=3, help='the number of steps after which the learning rate decay')
+parser.add_argument('--lr_dc_step', type=int, default=10, help='the number of steps after which the learning rate decay')
 parser.add_argument('-t', '--test', action='store_true', help='train or test')
 parser.add_argument('--embedding', type=str, default='random', help='random embedding or load trained embedding')
 parser.add_argument('--embedding_size', type=int, default=100, help='embedding size')
@@ -39,8 +39,10 @@ else:
     embedding = load_embedding(opt.dataset, opt.embedding)
 print("embedding loaded")
 
-x = import_module('models.' + opt.model)
-model = x.Model(train_data, test_data, embedding, n_nodes, opt.model, opt.dataset,
+# 动态导入python模块 效果与 import xxx 一样
+model_module = import_module('models.' + opt.model)
+# todo: 参数过多 使用conf对象传递参数
+model = model_module.Model(train_data, test_data, embedding, n_nodes, opt.model, opt.dataset,
                 opt.epoch, opt.batchSize, opt.embedding_size, opt.lr, opt.lr_dc, opt.lr_dc_step)
 model.build()
 # train
@@ -51,3 +53,9 @@ if not opt.test:
 # test
 else:
     model.test()
+
+    # sess = model.restore_session()
+    # print("type a session sequence split by whitespace, like: 1 2 3")
+    # while True:
+    #     seq = list(map(int, input().strip().split(" ")))
+    #     print(model.predict(sess, seq))
