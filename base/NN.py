@@ -65,11 +65,17 @@ class NeuralNetWork(metaclass=ABCMeta):
         self.learning_rate = tf.train.exponential_decay(self.learning_rate, global_step=self.global_step,
                                                         decay_steps=self.decay_steps,
                                                         decay_rate=self.learning_rate_decay, staircase=False)
-        self.opt = tf.train.AdamOptimizer(self.learning_rate).minimize(self.loss, global_step=self.global_step)
+        # 此处学习率自适应衰减实现有问题，暂时不能使用
+        # self.opt = tf.train.AdamOptimizer(self.learning_rate).minimize(self.loss, global_step=self.global_step)
+        self.opt = tf.train.AdamOptimizer(0.001).minimize(self.loss, global_step=self.global_step)
 
     @abstractmethod
     def get_feed_dict(self, batch, keep_prob):
-        """读取一个batch，组织placeholder"""
+        """
+        读取一个batch，组织placeholder
+        :param batch: 本批次的数据
+        :param keep_prob: dropout的保留概率 测试时应为1
+        """
         pass
 
     def train(self):
