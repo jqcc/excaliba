@@ -42,6 +42,8 @@ class NeuralNetWork(metaclass=ABCMeta):
         self.is_train = True
         self.embedding_ = None
 
+        self.best_result = [0, 0]
+
         self.logits = None
         self.loss = None
         self.opt = None
@@ -100,7 +102,7 @@ class NeuralNetWork(metaclass=ABCMeta):
                 self.test()
 
     def test(self):
-        best_result = [0, 0]
+
         saver = tf.train.Saver()
         self.is_train = False
 
@@ -127,12 +129,12 @@ class NeuralNetWork(metaclass=ABCMeta):
             hit = np.mean(hit) * 100
             mrr = np.mean(mrr) * 100
             test_loss = np.mean(test_loss_)
-            if hit >= best_result[0]:
-                best_result[0] = hit
+            if hit >= self.best_result[0]:
+                self.best_result[0] = hit
 
-            if mrr >= best_result[1]:
-                best_result[1] = mrr
-            print('test_loss:\t%4f\tRecall@20:\t%.4f\tMMR@20:\t%.4f' % (test_loss, best_result[0], best_result[1]))
+            if mrr >= self.best_result[1]:
+                self.best_result[1] = mrr
+            print('test_loss:\t%4f\tRecall@20:\t%.4f\tMMR@20:\t%.4f' % (test_loss, self.best_result[0], self.best_result[1]))
 
     def save_model(self, sess):
         saver = tf.train.Saver()
