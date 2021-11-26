@@ -37,7 +37,7 @@ if opt.embedding == "random":
     embedding = gen_embedding(n_nodes, opt.embedding_size)
 else:
     embedding = load_embedding(opt.dataset, opt.embedding)
-print("embedding loaded")
+print(opt.embedding + " embedding loaded")
 
 # 动态导入python模块 效果与 import xxx 一样
 model_module = import_module('models.' + opt.model)
